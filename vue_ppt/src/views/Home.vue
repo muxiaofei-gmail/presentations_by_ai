@@ -27,6 +27,12 @@ const categories = ref<Category[]>([
         title: 'AI Skill Tree ',
         description: '点亮隐藏技能树的关键节点',
         route: '/ai-skill-tree'
+      },
+      {
+        id: 'tv-buying-guide',
+        title: '电视选购指南',
+        description: '一文读懂如何挑选适合你的电视',
+        route: '/tv-buying-guide'
       }
     ]
   },
