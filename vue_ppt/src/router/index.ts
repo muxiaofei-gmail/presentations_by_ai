@@ -30,6 +30,10 @@ const router = createRouter({
     {
       path: '/tv-buying-guide',
       component: () => import('@/presentations/tv-buying-guide/index.vue')
+    },
+    {
+      path: '/tv-select',
+      component: () => import('@/presentations/tv-select/index.vue')
     }
   ],
 })

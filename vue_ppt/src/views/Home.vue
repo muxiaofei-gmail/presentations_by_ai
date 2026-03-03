@@ -33,6 +33,12 @@ const categories = ref<Category[]>([
         title: '电视选购指南',
         description: '一文读懂如何挑选适合你的电视',
         route: '/tv-buying-guide'
+      },
+      {
+        id: 'tv-select',
+        title: '电视选购核心参数',
+        description: '死磕三个参数，避开90%的工业垃圾',
+        route: '/tv-select'
       }
     ]
   },
