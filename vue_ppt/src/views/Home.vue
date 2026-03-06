@@ -66,6 +66,19 @@ const categories = ref<Category[]>([
         route: '/design-language-template'
       }
     ]
+  },
+  {
+    id: 'product-showcase',
+    name: '产品卡片模板',
+    expanded: false,
+    presentations: [
+      {
+        id: 'product-showcase',
+        title: '电视产品展示',
+        description: '产品卡片模板演示 - 电视/大家电产品展示',
+        route: '/product-showcase'
+      }
+    ]
   }
 ])
 
