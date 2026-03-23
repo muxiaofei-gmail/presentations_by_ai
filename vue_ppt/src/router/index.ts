@@ -38,6 +38,14 @@ const router = createRouter({
     {
       path: '/product-showcase',
       component: () => import('@/presentations/product-showcase/index.vue')
+    },
+    {
+      path: '/xidiji-select',
+      component: () => import('@/presentations/xidiji-select/index.vue')
+    },
+    {
+      path: '/xidiji-showcase',
+      component: () => import('@/presentations/xidiji-showcase/index.vue')
     }
   ],
 })

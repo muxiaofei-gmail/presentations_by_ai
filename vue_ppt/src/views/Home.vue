@@ -39,6 +39,12 @@ const categories = ref<Category[]>([
         title: '电视选购核心参数',
         description: '死磕三个参数，避开90%的工业垃圾',
         route: '/tv-select'
+      },
+      {
+        id: 'xidiji-select',
+        title: '洗地机选购核心参数',
+        description: '死磕三个指标，避开90%的工业垃圾',
+        route: '/xidiji-select'
       }
     ]
   },
@@ -77,6 +83,12 @@ const categories = ref<Category[]>([
         title: '电视产品展示',
         description: '产品卡片模板演示 - 电视/大家电产品展示',
         route: '/product-showcase'
+      },
+      {
+        id: 'xidiji-showcase',
+        title: '洗地机产品展示',
+        description: '产品卡片模板演示 - 洗地机/清洁电器产品展示',
+        route: '/xidiji-showcase'
       }
     ]
   }
