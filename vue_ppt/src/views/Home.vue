@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
+import { getProductShowcaseCategory } from '@/router/routes/navigation-config'
 
 interface Presentation {
   id: string
@@ -16,7 +17,8 @@ interface Category {
   presentations: Presentation[]
 }
 
-const categories = ref<Category[]>([
+// 静态分类配置
+const staticCategories = ref<Category[]>([
   {
     id: 'ai-skill-tree',
     name: 'AI邪修PPT',
@@ -45,6 +47,12 @@ const categories = ref<Category[]>([
         title: '洗地机选购核心参数',
         description: '死磕三个指标，避开90%的工业垃圾',
         route: '/xidiji-select'
+      },
+      {
+        id: 'saodiji-select',
+        title: '扫地机器人选购核心参数',
+        description: '三条红线，避开人工智障和赛博祖宗',
+        route: '/saodiji-select'
       }
     ]
   },
@@ -72,26 +80,16 @@ const categories = ref<Category[]>([
         route: '/design-language-template'
       }
     ]
-  },
-  {
-    id: 'product-showcase',
-    name: '产品卡片模板',
-    expanded: false,
-    presentations: [
-      {
-        id: 'product-showcase',
-        title: '电视产品展示',
-        description: '产品卡片模板演示 - 电视/大家电产品展示',
-        route: '/product-showcase'
-      },
-      {
-        id: 'xidiji-showcase',
-        title: '洗地机产品展示',
-        description: '产品卡片模板演示 - 洗地机/清洁电器产品展示',
-        route: '/xidiji-showcase'
-      }
-    ]
   }
+])
+
+// 动态生成产品展示分类
+const productShowcaseCategory = computed(() => getProductShowcaseCategory())
+
+// 合并后的分类列表
+const categories = computed(() => [
+  ...staticCategories.value,
+  productShowcaseCategory.value
 ])
 
 const toggleCategory = (categoryId: string) => {

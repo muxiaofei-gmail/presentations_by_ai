@@ -7,9 +7,12 @@
       :selected-id="selectedBackgroundId"
       :locales="locales"
       :selected-locale="selectedLocale"
+      :themes="themes"
+      :selected-theme="selectedTheme"
       @close="closeSettings"
       @select="handleBackgroundSelection"
       @select-locale="handleLocaleSelection"
+      @select-theme="handleThemeSelection"
     />
   </div>
 </template>
@@ -19,10 +22,12 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import BackgroundSettingsOverlay from './background-settings-overlay.vue'
 import { usePresentationContext } from '../presentation/presentation-context'
 import type { LocaleCode } from '../i18n/types'
+import type { ThemeId } from '../theme/types'
 
 const emit = defineEmits<{
   (event: 'change', id: string): void
   (event: 'change:locale', locale: LocaleCode): void
+  (event: 'change:theme', themeId: ThemeId): void
   (event: 'open-settings'): void
   (event: 'close-settings'): void
 }>()
@@ -33,8 +38,10 @@ const settingsOpen = ref(false)
 
 const backgrounds = computed(() => presentation.backgrounds)
 const locales = computed(() => presentation.locales)
+const themes = computed(() => presentation.themes)
 const selectedBackgroundId = computed(() => presentation.state.backgroundId)
 const selectedLocale = computed(() => presentation.state.locale)
+const selectedTheme = computed(() => presentation.state.themeId)
 
 const activeBackgroundComponent = computed(() => {
   const background = presentation.activeBackground.value
@@ -81,6 +88,11 @@ const handleBackgroundSelection = (id: string) => {
 const handleLocaleSelection = (locale: LocaleCode) => {
   presentation.setLocale(locale)
   emit('change:locale', selectedLocale.value)
+}
+
+const handleThemeSelection = (themeId: ThemeId) => {
+  presentation.setTheme(themeId)
+  emit('change:theme', selectedTheme.value)
 }
 </script>
 

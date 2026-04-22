@@ -280,7 +280,11 @@ onUnmounted(() => {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  /* 使用主题背景色 */
+  background: linear-gradient(135deg,
+    rgb(var(--surface_container_lowest) / 1) 0%,
+    rgb(var(--surface) / 1) 50%,
+    rgb(var(--surface_container_low) / 1) 100%);
   z-index: 0;
 }
 

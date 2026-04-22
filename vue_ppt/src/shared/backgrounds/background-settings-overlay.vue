@@ -20,6 +20,7 @@
         </header>
 
         <div class="preferences-wrapper">
+          <!-- 语言选择 -->
           <section class="preference-section" aria-label="语言">
             <div class="section-heading">
               <h3>语言</h3>
@@ -37,6 +38,28 @@
               >
                 <span class="pill-title">{{ localeItem.nativeLabel }}</span>
                 <span class="pill-description">{{ localeItem.label }}</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 主题选择 -->
+          <section class="preference-section" aria-label="主题">
+            <div class="section-heading">
+              <h3>主题</h3>
+              <p>切换演示的视觉风格。</p>
+            </div>
+            <div class="choice-row">
+              <button
+                v-for="themeItem in themes"
+                :key="themeItem.id"
+                type="button"
+                class="pill-button"
+                :class="{ active: themeItem.id === selectedTheme }"
+                :aria-pressed="themeItem.id === selectedTheme"
+                @click="selectTheme(themeItem.id)"
+              >
+                <span class="pill-title">{{ themeItem.name }}</span>
+                <span class="pill-description">{{ themeItem.description }}</span>
               </button>
             </div>
           </section>
@@ -67,6 +90,7 @@
 import { onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 import type { BackgroundModuleMeta } from './types'
 import type { LocaleMeta, LocaleCode } from '../i18n/types'
+import type { ThemeDefinition, ThemeId } from '../theme/types'
 
 const props = defineProps<{
   visible: boolean
@@ -74,12 +98,15 @@ const props = defineProps<{
   selectedId: string
   locales: LocaleMeta[]
   selectedLocale: LocaleCode
+  themes: ThemeDefinition[]
+  selectedTheme: ThemeId
 }>()
 
 const emit = defineEmits<{
   (event: 'close'): void
   (event: 'select', id: string): void
   (event: 'select-locale', code: LocaleCode): void
+  (event: 'select-theme', themeId: ThemeId): void
 }>()
 
 const overlayRef = ref<HTMLDivElement | null>(null)
@@ -123,6 +150,10 @@ const selectBackground = (id: string) => {
 
 const selectLocale = (code: LocaleCode) => {
   emit('select-locale', code)
+}
+
+const selectTheme = (themeId: ThemeId) => {
+  emit('select-theme', themeId)
 }
 </script>
 

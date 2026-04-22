@@ -3,6 +3,9 @@ import type { ComputedRef, DeepReadonly } from 'vue'
 
 import type { BackgroundModuleMeta } from '../backgrounds/types'
 import type { LocaleCode, LocaleMeta } from '../i18n/types'
+import type { ThemeDefinition, ThemeId } from '../theme/types'
+import { themeRegistry } from '../theme/themes'
+import { applyThemeToDocument } from '../theme/apply-theme'
 
 const PresentationContextSymbol = Symbol('PresentationContext')
 
@@ -17,23 +20,28 @@ const isBrowser = typeof window !== 'undefined'
 export interface PresentationPreferences {
   backgroundId: string
   locale: LocaleCode
+  themeId: ThemeId
 }
 
 export interface PresentationContext {
   state: DeepReadonly<PresentationPreferences>
   backgrounds: BackgroundModuleMeta[]
   locales: LocaleMeta[]
+  themes: ThemeDefinition[]
   activeBackground: ComputedRef<BackgroundModuleMeta | undefined>
   activeLocale: ComputedRef<LocaleMeta | undefined>
+  activeTheme: ComputedRef<ThemeDefinition | undefined>
   setBackground(backgroundId: string): void
   setLocale(locale: LocaleCode): void
+  setTheme(themeId: ThemeId): void
   resetToDefaults(): void
 }
 
 interface CreatePresentationContextOptions {
-  defaults: PresentationPreferences
+  defaults: Partial<PresentationPreferences>
   backgrounds: BackgroundModuleMeta[]
   locales: LocaleMeta[]
+  themes?: ThemeDefinition[]
   contextKey?: string
   persist?: boolean
 }
@@ -49,6 +57,13 @@ const normalizeBackground = (id: string, backgrounds: BackgroundModuleMeta[], fa
   const match = backgrounds.find(background => background.id === id)
   if (match) return match.id
   return backgrounds[0]?.id ?? fallback
+}
+
+const normalizeTheme = (id: ThemeId, themes: ThemeDefinition[], fallback: ThemeId): ThemeId => {
+  const match = themes.find(theme => theme.id === id)
+  if (match) return match.id
+  const fallbackTheme = themes.find(theme => theme.id === fallback)
+  return fallbackTheme?.id ?? themes[0]?.id ?? 'dark'
 }
 
 const applyLocaleMeta = (meta: LocaleMeta | undefined) => {
@@ -70,14 +85,25 @@ export const createPresentationContext = (
   const storageKey = shouldPersist ? createStorageKey(options.contextKey) : null
 
   const backgroundsMap = new Map(options.backgrounds.map(background => [background.id, background]))
+  const themes = options.themes ?? themeRegistry
+  const themesMap = new Map(themes.map(theme => [theme.id, theme]))
 
   const defaults: PresentationPreferences = {
     backgroundId: normalizeBackground(
-      options.defaults.backgroundId,
+      options.defaults.backgroundId ?? 'soft-mesh',
       options.backgrounds,
-      options.defaults.backgroundId
+      options.defaults.backgroundId ?? 'soft-mesh'
     ),
-    locale: normalizeLocale(options.defaults.locale, options.locales, options.defaults.locale)
+    locale: normalizeLocale(
+      options.defaults.locale ?? 'zh-Hans',
+      options.locales,
+      options.defaults.locale ?? 'zh-Hans'
+    ),
+    themeId: normalizeTheme(
+      options.defaults.themeId ?? 'dark',
+      themes,
+      options.defaults.themeId ?? 'dark'
+    )
   }
 
   let initial: PresentationPreferences = { ...defaults }
@@ -86,10 +112,11 @@ export const createPresentationContext = (
     try {
       const stored = window.localStorage.getItem(storageKey)
       if (stored) {
-        const parsed = JSON.parse(stored) as PresentationPreferences
+        const parsed = JSON.parse(stored) as Partial<PresentationPreferences>
         initial = {
-          backgroundId: normalizeBackground(parsed.backgroundId, options.backgrounds, defaults.backgroundId),
-          locale: normalizeLocale(parsed.locale, options.locales, defaults.locale)
+          backgroundId: normalizeBackground(parsed.backgroundId ?? '', options.backgrounds, defaults.backgroundId),
+          locale: normalizeLocale(parsed.locale ?? '', options.locales, defaults.locale),
+          themeId: normalizeTheme(parsed.themeId ?? '', themes, defaults.themeId)
         }
       }
     } catch (error) {
@@ -103,13 +130,20 @@ export const createPresentationContext = (
     if (!shouldPersist || !storageKey || !isBrowser) return
     const payload = JSON.stringify({
       backgroundId: state.backgroundId,
-      locale: state.locale
+      locale: state.locale,
+      themeId: state.themeId
     })
     window.localStorage.setItem(storageKey, payload)
   }
 
   const activeBackground = computed(() => backgroundsMap.get(state.backgroundId))
   const activeLocale = computed(() => options.locales.find(locale => locale.code === state.locale))
+  const activeTheme = computed(() => themesMap.get(state.themeId))
+
+  // 初始化时应用主题
+  if (isBrowser && activeTheme.value) {
+    applyThemeToDocument(activeTheme.value)
+  }
 
   watch(
     () => state.locale,
@@ -127,6 +161,17 @@ export const createPresentationContext = (
     }
   )
 
+  watch(
+    () => state.themeId,
+    () => {
+      if (activeTheme.value) {
+        applyThemeToDocument(activeTheme.value)
+      }
+      persist()
+    },
+    { immediate: true }
+  )
+
   const setBackground = (backgroundId: string) => {
     const normalized = normalizeBackground(backgroundId, options.backgrounds, state.backgroundId)
     state.backgroundId = normalized
@@ -137,19 +182,28 @@ export const createPresentationContext = (
     state.locale = normalized
   }
 
+  const setTheme = (themeId: ThemeId) => {
+    const normalized = normalizeTheme(themeId, themes, state.themeId)
+    state.themeId = normalized
+  }
+
   const resetToDefaults = () => {
     state.backgroundId = defaults.backgroundId
     state.locale = defaults.locale
+    state.themeId = defaults.themeId
   }
 
   const context: PresentationContext = {
     state: readonly(state),
     backgrounds: options.backgrounds,
     locales: options.locales,
+    themes,
     activeBackground,
     activeLocale,
+    activeTheme,
     setBackground,
     setLocale,
+    setTheme,
     resetToDefaults
   }
 

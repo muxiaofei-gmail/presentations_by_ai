@@ -2,8 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==================== 本地托管 Manrope 字体 ==================== */
+/* 可变字体 - 单文件支持所有权重（400-800） */
+@font-face {
+  font-family: 'Manrope';
+  src: url('@/assets/fonts/Manrope/Manrope-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 静态字体备选（如需兼容旧浏览器） */
+@font-face {
+  font-family: 'Manrope';
+  src: url('@/assets/fonts/Manrope/static/Manrope-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('@/assets/fonts/Manrope/static/Manrope-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('@/assets/fonts/Manrope/static/Manrope-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('@/assets/fonts/Manrope/static/Manrope-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('@/assets/fonts/Manrope/static/Manrope-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
+  /* ==================== 默认主题（dark）CSS 变量 ==================== */
   :root {
+    /* 基础颜色 */
     --surface: 17 24 39;
     --surface-muted: 30 41 59;
     --text-primary: 226 232 240;
@@ -11,12 +64,119 @@
     --accent: 129 140 248;
     --border: 71 85 105;
     --highlight: 253 224 71;
+
+    /* Cinematic Token 兼容值（dark 主题） */
+    --surface_container_lowest: 0 0 0;
+    --surface_container_low: 24 32 48;
+    --surface_container: 30 41 59;
+    --surface_container_high: 37 48 63;
+    --surface_container_highest: 47 57 75;
+    --surface_bright: 55 65 80;
+    --primary: 129 140 248;
+    --primary_container: 147 160 255;
+    --secondary: 79 70 229;
+    --tertiary: 99 102 241;
+    --on_primary: 255 255 255;
+    --on_secondary: 255 255 255;
+    --on_tertiary: 255 255 255;
+    --on_surface: 226 232 240;
+    --on_surface_variant: 148 163 184;
+    --outline: 71 85 105;
+    --outline_variant: 100 116 139;
+
+    /* 产品卡片专用 */
+    --accent-primary: 236 72 153;
+    --accent-secondary: 249 115 22;
+    --card-border-color: 255 255 255;
+    --card-background: 220 220 220;
+  }
+
+  /* ==================== Light 主题 CSS 变量 ==================== */
+  :root[data-theme="light"] {
+    --surface: 255 255 255;
+    --surface-muted: 248 250 252;
+    --text-primary: 15 23 42;
+    --text-muted: 71 85 105;
+    --accent: 79 70 229;
+    --border: 148 163 184;
+    --highlight: 252 211 77;
+
+    --surface_container_lowest: 0 0 0;
+    --surface_container_low: 241 245 249;
+    --surface_container: 248 250 252;
+    --surface_container_high: 226 232 240;
+    --surface_container_highest: 203 213 225;
+    --surface_bright: 241 245 249;
+    --primary: 79 70 229;
+    --primary_container: 99 102 241;
+    --secondary: 59 130 246;
+    --tertiary: 14 165 233;
+    --on_primary: 255 255 255;
+    --on_secondary: 255 255 255;
+    --on_tertiary: 255 255 255;
+    --on_surface: 15 23 42;
+    --on_surface_variant: 71 85 105;
+    --outline: 148 163 184;
+    --outline_variant: 203 213 225;
+
+    --accent-primary: 236 72 153;
+    --accent-secondary: 249 115 22;
+    --card-border-color: 148 163 184;
+    --card-background: 248 250 252;
+  }
+
+  /* ==================== Cinematic Editorial 主题 CSS 变量 ==================== */
+  :root[data-theme="cinematic"] {
+    /* Surface 层级系统 */
+    --surface: 8 14 29;             /* #080e1d */
+    --surface-muted: 12 19 36;      /* #0c1324 */
+    --surface_container_lowest: 0 0 0;      /* #000000 */
+    --surface_container_low: 12 19 36;      /* #0c1324 */
+    --surface_container: 18 25 43;          /* #12192b */
+    --surface_container_high: 29 37 59;     /* #1d253b */
+    --surface_container_highest: 45 53 72;  /* #2d3548 */
+    --surface_bright: 61 74 92;             /* #3d4a5c */
+
+    /* 三色体系 */
+    --primary: 255 138 0;           /* #FF8A00 */
+    --primary_container: 255 159 77; /* #ff9f4d */
+    --secondary: 0 47 167;          /* #002fa7 */
+    --tertiary: 0 212 255;          /* #00D4FF */
+
+    /* 文字颜色 */
+    --on_primary: 84 42 0;          /* #542a00 */
+    --on_secondary: 255 255 255;    /* #ffffff */
+    --on_tertiary: 0 61 79;         /* #003d4f */
+    --on_surface: 224 229 251;      /* #e0e5fb */
+    --on_surface_variant: 165 170 191; /* #a5aabf */
+
+    /* 边框系统 */
+    --outline: 66 72 89;            /* #424859 */
+    --outline_variant: 66 72 89;    /* #424859 */
+
+    /* 兼容原有 token */
+    --text-primary: 224 229 251;
+    --text-muted: 165 170 191;
+    --accent: 255 138 0;
+    --border: 66 72 89;
+    --highlight: 0 212 255;
+
+    /* 产品卡片 - No-Line 规则 */
+    --accent-primary: 255 138 0;    /* #FF8A00 */
+    --accent-secondary: 0 47 167;   /* #002fa7 */
+    --card-border-color: 0 0 0;     /* transparent */
+    --card-background: 18 25 43;    /* #12192b */
   }
 
   body {
     margin: 0;
     min-height: 100vh;
     @apply bg-surface text-text-primary antialiased transition-colors duration-300 font-sans;
+  }
+
+  /* Cinematic Editorial 主题使用 Manrope 字体 */
+  :root[data-theme="cinematic"] body {
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
   }
 
   body::selection {

@@ -48,8 +48,8 @@ export type RecommendLevel = 1 | 2 | 3 | 4 | 5
 export interface BaseProduct {
   /** 产品ID */
   id: string
-  /** 产品类型 */
-  type: ProductType
+  /** 产品类型（可选，向后兼容） */
+  type?: ProductType
   /** 品牌名称 */
   brand: string
   /** 产品型号 */
@@ -77,7 +77,7 @@ export interface BaseProduct {
  * 保持与现有数据结构的兼容性
  */
 export interface TVProduct extends BaseProduct {
-  type: 'tv'
+  type?: 'tv'
 }
 
 /**
@@ -88,10 +88,17 @@ export interface XidijiProduct extends BaseProduct {
 }
 
 /**
+ * 扫地机器人产品类型
+ */
+export interface SaodijiProduct extends BaseProduct {
+  type: 'saodiji'
+}
+
+/**
  * 产品联合类型
  * 支持所有已注册的产品类型
  */
-export type Product = TVProduct | XidijiProduct
+export type Product = TVProduct | XidijiProduct | SaodijiProduct
 
 /** 产品卡片配置 */
 export interface ProductCardConfig {
@@ -113,4 +120,11 @@ export function isTVProduct(product: Product): product is TVProduct {
  */
 export function isXidijiProduct(product: Product): product is XidijiProduct {
   return product.type === 'xidiji'
+}
+
+/**
+ * 类型守卫：判断是否为扫地机器人产品
+ */
+export function isSaodijiProduct(product: Product): product is SaodijiProduct {
+  return product.type === 'saodiji'
 }

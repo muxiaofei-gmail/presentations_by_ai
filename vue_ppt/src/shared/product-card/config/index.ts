@@ -8,7 +8,7 @@
  */
 
 // 产品类型定义
-export type ProductType = 'tv' | 'xidiji'
+export type ProductType = 'tv' | 'xidiji' | 'saodiji'
 
 // 配置接口
 export interface ProductConfig {
@@ -70,6 +70,20 @@ const configRegistry: Record<ProductType, ProductConfig> = {
       { key: 'bodyHeight', name: '机身厚度', unit: 'cm' },
       { key: 'edgeClean', name: '贴边设计' },
       { key: 'special', name: '特殊功能' }
+    ]
+  },
+
+  // 扫地机器人产品配置
+  saodiji: {
+    type: 'saodiji',
+    typeName: '扫地机器人',
+    specsTemplate: [
+      { key: 'navigation', name: '导航方式', important: true },
+      { key: 'suction', name: '吸力', unit: 'Pa' },
+      { key: 'avoidance', name: '避障能力', important: true },
+      { key: 'edgeCoverage', name: '边角覆盖', important: true },
+      { key: 'antiWrap', name: '防缠绕', important: true },
+      { key: 'baseStation', name: '基站功能' }
     ]
   }
 }

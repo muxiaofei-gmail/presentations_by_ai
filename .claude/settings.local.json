@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where python)",
+      "Bash(pip --version)",
+      "Bash(where python3)",
+      "Bash(py --version)",
+      "Bash(winget install Python.Python.3.12 --accept-package-agreements --accept-source-agreements)",
+      "Bash(winget source reset --force)",
+      "Bash(winget --version)",
+      "Bash(winget install Python.Python.3.12 --accept-package-agreements --accept-source-agreements --source winget)",
+      "Bash(curl -L -o /c/Users/Administrator/Downloads/python-installer.exe \"https://www.python.org/ftp/python/3.12.8/python-3.12.8-amd64.exe\")",
+      "Bash(curl -L -o /c/Users/Administrator/Downloads/python-installer.exe \"https://mirrors.huaweicloud.com/python/3.12.8/python-3.12.8-amd64.exe\" --connect-timeout 30)",
+      "Bash(/c/Users/Administrator/Downloads/python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_pip=1)",
+      "Bash(\"/c/Program Files/Python312/python.exe\" --version)",
+      "Bash(\"/c/Program Files/Python312/Scripts/pip.exe\" --version)",
+      "Bash(node --version)",
+      "Bash(npm --version)",
+      "Bash(git --version)"
+    ]
+  }
+}
